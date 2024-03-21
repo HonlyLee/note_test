@@ -139,7 +139,7 @@ cout << *max_element(v.begin(),v.end());
 - **示例**：
 ```c++
 vector<int> v = {5,1,7,3,10,18,9};
-nth_element(v.begin(),v.begin() + 3,v.end());
+nth_element(v.begin(),v.begin() + 3,v.end());  //begin()+3的位置在“7”
 
 for (const auto &i : v)cout << i << " ";
 
@@ -532,6 +532,63 @@ sum（L,R）= prefix[R] - prefix[L-1]
 
 6. **循环数组中的子数组和问题：** 如果数组是一个循环数组，前缀和同样可以应用于解决子数组和的问题。需要注意的是，在计算两个前缀和之差时，要考虑数组的循环性。
 
+- eg:
+![Alt text](image-43.png)
+- 代码：
+```c++
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+
+#define x first
+#define y second
+
+using namespace std;
+
+typedef long long LL;
+typedef pair<int, int> PII;
+
+const int N = 1e5 + 10;
+
+int n;
+PII q[N];
+LL pre[N], nex[N];
+
+int main()
+{
+    cin >> n;
+    for (int i = 1; i <= n; ++ i )
+        cin >> q[i].y >> q[i].x;
+    
+    sort(q + 1, q + n + 1);
+    
+    LL s = 0;
+    for (int i = 1; i <= n; ++ i ) 
+    {
+        
+        pre[i] = pre[i - 1] + s * (q[i].x - q[i - 1].x);
+        s += q[i].y;
+    }
+    
+    s = 0;
+    for (int i = n; i >= 1; -- i )
+    {
+        
+        nex[i] = nex[i + 1] + s * (q[i + 1].x - q[i].x);
+        s += q[i].y;
+    }
+    
+    LL res = 1e18;
+    for (int i = 1; i <= n; ++ i )
+        res = min(res, pre[i] + nex[i]);
+    
+    cout << res << endl;
+    
+    return 0;
+}
+```
+> 总结：当**遍历每个状态**的结果都需要**相同方法的计算时**，可考虑使用前缀和减少一些重复的计算，减少时间复杂度。同时前缀和也可灵活变通为“后缀和”，两者可结合在一起使用
+
 ## 差分
 
 - 特性
@@ -714,3 +771,100 @@ int main()
 ```
 ## 二分法
 > 二分法适用于**有序数据集合**，每次迭代可以将搜索==范围缩小一半==
+
+### 整数二分
+> 就是在一个已有的==有序数组上==，进行二分查找，一般为找出某个值的位置，或者是找出分界点。
+
+![Alt text](image-40.png)
+
+- 模板：
+```c++
+//找到升序数组a中的x第一次出现的位置
+int l = -1;,r = 1e9;
+while(l + 1 != r)//相邻退出
+{
+  int mid = (l + r) / 2;
+  if(a[mid] >= x) r = mid;
+  else l = mid;
+}
+cout << r;
+
+
+
+int a[200];
+for (int i = 0; i < 200; i++)
+{
+    a[i] = 4 * i + 6;
+}
+int x;
+cin >> x;
+int l = -1, r = 199;
+while (l + 1 != r)
+{
+    int mid = (l + r) / 2;
+    if (a[mid] <= x)
+        l = mid;
+    else
+        r = mid;
+}
+cout << l;
+return 0;
+
+```
+
+### 二分答案
+- 模板：
+![Alt text](image-41.png)
+> 二分答案实际上就是在有序序列整数二分的基础上，==存在一个和该序列**单调性一样**的对应函数==，那么，通过对函数值的二分查找，能找到某个对应值区间的上下界，得出答案。对于这种题，常出现的问法有：“**最小xx中的最大xx**”或者“**最大中的最小**”，前者对应的是二分查找区间的==上界==，==后者为下界==。
+
+- eg:
+![Alt text](image-42.png)
+
+- 代码示例：
+```c++
+#include <bits/stdc++.h>
+using namespace std;
+const int N = 5e4 + 9;
+long long  a[N];
+int n,m;
+long long L;
+int check(int mid)
+{
+  int num = 0;
+  int lst = 0;
+  for(int i = 1;i <= n;i++)
+  {
+    if(a[i] - a[lst] < mid) 
+    {
+      num++;
+      continue;
+    }
+    
+      lst = i;
+    
+  }
+  if(L - a[lst] < mid) return m+1;
+  return num;
+
+
+}
+int main()
+{
+  
+  cin >> L >> n >> m;
+  for(int i = 1;i <= n;i++)
+  {
+    cin >> a[i];
+  } 
+  long long l = 0, r = 1e9+5;
+  while(l + 1 != r)
+  {
+    long long mid = (l + r) / 2;
+    if(check(mid) <= m) l = mid;
+    else r = mid;
+  } 
+  
+  cout << l;
+  return 0;
+}
+```
