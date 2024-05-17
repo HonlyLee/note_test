@@ -558,6 +558,7 @@ int main()
 {
     cin >> n;
     for (int i = 1; i <= n; ++ i )
+    //         重量       位置
         cin >> q[i].y >> q[i].x;
     
     sort(q + 1, q + n + 1);
@@ -776,6 +777,9 @@ int main()
 > 就是在一个已有的==有序数组上==，进行二分查找，一般为找出某个值的位置，或者是找出分界点。
 
 ![Alt text](image-40.png)
+
+- 流程：
+![Alt text](image-45.png)
 
 - 模板：
 ```c++

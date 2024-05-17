@@ -150,5 +150,139 @@ System.out.println("f的值" + f);
 - **如何将字符串转换成基本数据类型**
 ![Alt text](image-3.png)
 
+## 常用类
+### Object类
+> **它是所有类的父类，如果一个类没有使用extends关键字明确标识继承另外一个类，那么这个类就默认继承 Object 类。**
 
+1. toString()方法
+- eg:
+```java
+package educoder;
+public class TestToStringDemo2 {
+    public static void main(String[] args) {
+        Person p = new Person();
+        System.out.println(p);
+    }
+}
+class Person extends Object {
+    String name = "张三";
+    int age = 18;
+    // 复写Object类中的toString()方法
+    public String toString() {
+        return "我是:" + this.name + ",今年:" + this.age + "岁";
+    }
+}
+```
+
+2. equals()方法
+- ***如果不重写该方法，那么比对的是对象的地址内存***
+- eg
+```java
+package educoder;
+public class test {
+    public static void main(String[] args) {
+        Dog dog = new Dog();
+        dog.name = "jack";
+        Dog dog1 = new Dog();
+        dog1.name = "jack";
+        System.out.println(dog);
+        System.out.println(dog1);
+        if (dog.equals(dog1)) {
+            System.out.println("两个对象是相同的");
+        } else {
+            System.out.println("两个对象是不相同的");
+        }
+    }
+}
+class Animal {
+}
+class Dog extends Animal {
+    int age = 20;
+    String name = "rose";
+    public String toString() {
+        return "Dog [age=" + age + ", name=" + name + "]";
+    }
+    /* getClass() 得到的是一个类对象 */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)// 两个对象的引用是否相同，如果相同，说明两个对象就是同一个
+            return true;
+        if (obj == null)// 如果比较对象为空，不需要比较，肯定不相等
+            return false;
+        if (getClass() != obj.getClass())// 比较两个对象的类型是否相同，如果不同，肯定不相同
+            return false;
+        Dog other = (Dog) obj;// 转化成相同类型后，判断属性值是否相同
+        if (name == null) {
+            if (other.name != null)
+                return false;
+        } else if (!name.equals(other.name))
+            return false;
+        return true;
+    }
+}
+
+```
+
+### ArrayList类
+- 语法格式：
+
+`import java.util.ArrayList; // 引入 ArrayList 类`
+`ArrayList<E> objectName =new ArrayList<E>();　 // 初始化`
+
+- 方法：
+1. 添加元素（add()方法）
+- eg:
+```java
+import java.util.ArrayList;
+
+public class RunoobTest {
+    public static void main(String[] args) {
+        ArrayList<String> sites = new ArrayList<String>();
+        sites.add("Google");
+        sites.add("Runoob");
+        sites.add("Taobao");
+        sites.add("Weibo");
+        System.out.println(sites);
+    }
+}
+
+/*输出结果为：
+[Google, Runoob, Taobao, Weibo]*/
+```
+2. 访问元素（get()方法）
+- eg:
+```java
+import java.util.ArrayList;
+
+public class RunoobTest {
+    public static void main(String[] args) {
+        ArrayList<String> sites = new ArrayList<String>();
+        sites.add("Google");
+        sites.add("Runoob");
+        sites.add("Taobao");
+        sites.add("Weibo");
+        System.out.println(sites.get(1));  // 访问第二个元素
+    }
+}
+```
+
+3. 修改元素（set()方法）
+- eg:
+```java
+import java.util.ArrayList;
+
+public class RunoobTest {
+    public static void main(String[] args) {
+        ArrayList<String> sites = new ArrayList<String>();
+        sites.add("Google");
+        sites.add("Runoob");
+        sites.add("Taobao");
+        sites.add("Weibo");
+        sites.set(2, "Wiki"); // 第一个参数为索引位置，第二个为要修改的值
+        System.out.println(sites);
+    }
+}
+```
+
+4. 删除元素
 
